@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<students>
+  <student id="1">
+    <name>Le Minh Khanh</name>
+    <age>18</age>
+    <adress>DaNang</adress>
+    <dateOfBirth>12/11/2005</dateOfBirth>
+  </student>
+ 
