@@ -19,7 +19,7 @@ import org.xml.sax.SAXException;
 public class Main {
     public static void main(String[] args) {
         try {
-            // Đọc thông tin từ tệp student.xml
+           
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document studentDoc = docBuilder.parse(new File("student.xml"));
@@ -27,7 +27,7 @@ public class Main {
 
             NodeList studentList = studentDoc.getElementsByTagName("student");
 
-            // Tạo và khởi động các luồng
+            
             Thread2 thread2 = new Thread2();
             Thread3 thread3 = new Thread3();
 
@@ -41,22 +41,21 @@ public class Main {
                     Element studentElement = (Element) studentNode;
                     String dateOfBirth = studentElement.getElementsByTagName("dateOfBirth").item(0).getTextContent();
 
-                    // Gửi ngày sinh cho Thread2 và Thread3 để xử lý
+                    
                     thread2.processDateOfBirth(dateOfBirth);
                     thread3.processDateOfBirth(dateOfBirth);
                 }
             }
 
-            // Đợi các luồng hoàn thành
+            
             thread2.join();
             thread3.join();
 
-            // Lấy kết quả từ các luồng
+            
             String age = thread2.getEncodedAge();
             String sum = thread3.getSum();
             boolean isPrime = thread3.isPrime();
 
-            // Tạo và lưu tệp kết quả
             createResultFile(age, sum, isPrime);
         } catch (InterruptedException | IOException | ParserConfigurationException | SAXException | TransformerException e) {
             e.printStackTrace();
@@ -65,31 +64,30 @@ public class Main {
 
     private static void createResultFile(String age, String sum, boolean isPrime)
             throws IOException, ParserConfigurationException, TransformerException {
-        // Tạo một tài liệu XML mới
+        
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
         Document doc = docBuilder.newDocument();
 
-        // Tạo phần tử gốc <Student>
+        
         Element studentElement = doc.createElement("Student");
         doc.appendChild(studentElement);
 
-        // Tạo phần tử <age> và đặt giá trị
+       
         Element ageElement = doc.createElement("age");
         ageElement.setTextContent(age);
         studentElement.appendChild(ageElement);
 
-        // Tạo phần tử <sum> và đặt giá trị
+        
         Element sumElement = doc.createElement("sum");
         sumElement.setTextContent(sum);
         studentElement.appendChild(sumElement);
 
-        // Tạo phần tử <isDigit> và đặt giá trị
         Element isDigitElement = doc.createElement("isDigit");
         isDigitElement.setTextContent(String.valueOf(isPrime));
         studentElement.appendChild(isDigitElement);
 
-        // Lưu tài liệu XML vào tệp kq.xml
+        
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource source = new DOMSource(doc);
@@ -114,19 +112,19 @@ public class Main {
 
         @Override
         public void run() {
-            // Tính toán tuổi và mã hóa tuổi
+            
             int age = calculateAge(dateOfBirth);
             encodedAge = encodeAge(age);
         }
 
         private int calculateAge(String dob) {
-            // Split ngày, tháng, năm từ chuỗi dateOfBirth và tính tuổi
+            
             String[] parts = dob.split("/");
             int dayOfBirth = Integer.parseInt(parts[0]);
             int monthOfBirth = Integer.parseInt(parts[1]);
             int yearOfBirth = Integer.parseInt(parts[2]);
 
-            // Lấy ngày, tháng, năm hiện tại
+            
             java.util.Date currentDate = new java.util.Date();
             java.util.Calendar calendar = java.util.Calendar.getInstance();
             calendar.setTime(currentDate);
@@ -134,16 +132,16 @@ public class Main {
             int currentMonth = calendar.get(java.util.Calendar.MONTH) + 1;
             int currentDay = calendar.get(java.util.Calendar.DAY_OF_MONTH);
 
-            // Tính tuổi
+            
             int age = currentYear - yearOfBirth;
             if (currentMonth < monthOfBirth || (currentMonth == monthOfBirth && currentDay < dayOfBirth)) {
-                age--; // Giảm tuổi đi 1 nếu chưa đến sinh nhật trong năm nay
+                age--; 
             }
             return age;
         }
 
         private String encodeAge(int age) {
-            // Mã hóa tuổi (ví dụ: chuyển đổi tuổi thành chuỗi và đảo ngược chuỗi)
+            
             return new StringBuilder(String.valueOf(age)).reverse().toString();
         }
     }
@@ -167,16 +165,16 @@ public class Main {
 
         @Override
         public void run() {
-            // Tính tổng các chữ số trong ngày sinh và kiểm tra xem tổng đó có phải là số nguyên tố hay không
+           
             int sum = calculateSumOfDigits(dateOfBirth);
             Thread3.sum = String.valueOf(sum);
 
-            // Kiểm tra xem tổng có phải là số nguyên tố hay không
+            
             isPrime = checkIfPrime(sum);
         }
 
         private int calculateSumOfDigits(String dob) {
-            // Tách ngày, tháng, năm từ chuỗi dateOfBirth và tính tổng các chữ số
+           
             String[] parts = dob.split("/");
             int day = Integer.parseInt(parts[0]);
             int month = Integer.parseInt(parts[1]);
@@ -187,7 +185,7 @@ public class Main {
         }
 
         private int sumOfDigits(int number) {
-            // Tính tổng các chữ số trong số number
+            
             int sum = 0;
             while (number > 0) {
                 sum += number % 10;
@@ -197,7 +195,7 @@ public class Main {
         }
 
         private boolean checkIfPrime(int number) {
-            // Kiểm tra xem number có phải là số nguyên tố hay không
+           
             if (number <= 1) {
                 return false;
             }
